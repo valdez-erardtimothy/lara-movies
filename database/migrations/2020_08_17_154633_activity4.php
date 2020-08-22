@@ -57,6 +57,7 @@ class Activity4 extends Migration
             $table->foreign('role_id')->references('id')->on('actor_roles')->onDelete('set null');
 
             $table->primary(['actor_id', 'film_id']);
+            $table->string('character', 64);
         });
     }
 
