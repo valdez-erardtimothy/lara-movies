@@ -22,14 +22,14 @@ class Activity4 extends Migration
 
     private function createGenresTable(){
         Schema::create('genres', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('genre', 64);
         });
     }
     
     private function createActorRolesTable() {
         Schema::create('actor_roles', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('role', 64);
         });
     }
@@ -40,7 +40,7 @@ class Activity4 extends Migration
 
     private function addGenreFKColumn() {
         Schema::table('films', function($table) {
-            $table->integer('genre_id')->nullable()->unsigned();
+            $table->bigInteger('genre_id')->nullable()->unsigned();
             $table->foreign('genre_id')->references('id')->on('genres')->onDelete('set null');
         });
     }
@@ -53,7 +53,7 @@ class Activity4 extends Migration
             $table->foreignId('actor_id')->constrained('actors')->onDelete('restrict');
             $table->foreignId('film_id')->constrained('films')->onDelete('restrict');
             
-            $table->integer('role_id')->nullable()->unsigned();
+            $table->bigInteger('role_id')->nullable()->unsigned();
             $table->foreign('role_id')->references('id')->on('actor_roles')->onDelete('set null');
 
             $table->primary(['actor_id', 'film_id']);
