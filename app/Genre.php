@@ -8,4 +8,8 @@ class Genre extends Model
 {
     //
     public $timestamps=false;
+
+    public function film() { 
+        return $this->hasMany('App\Film');
+    }
 }

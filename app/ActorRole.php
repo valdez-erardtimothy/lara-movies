@@ -9,4 +9,8 @@ class ActorRole extends Model
     //
 
     public $timestamps=false;
+
+    public function filmActor() {
+        $this->hasMany('App\FilmActor');
+    }
 }

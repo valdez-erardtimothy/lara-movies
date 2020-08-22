@@ -10,10 +10,14 @@ class Film extends Model
     
     public $timestamps = false;
     public function producer() {
-        $this->belongsToMany('App\Producer');
+        return $this->belongsToMany('App\Producer', 'film_producers');
     }
 
     public function actor() {
-        $this->belongsToMany('\App\Actor')->using('App\FilmActor');
+        return $this->belongsToMany('\App\Actor','film_actors')->using('App\FilmActor');
+    }
+
+    public function genre() {
+        return $this->belongsTo('App\Genre');
     }
 }

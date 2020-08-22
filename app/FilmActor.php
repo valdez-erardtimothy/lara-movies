@@ -8,8 +8,10 @@ class FilmActor extends Pivot
 {
     //
 
+    protected $table = 'film_actors';
+
     public function actorRole() {
-        $this->belongsTo('\App\ActorRole');
+        $this->belongsTo('App\ActorRole');
     }
     
 }

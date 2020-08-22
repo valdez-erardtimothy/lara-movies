@@ -11,6 +11,6 @@ class Actor extends Model
     public $timestamps=false; 
 
     public function films() {
-        $this->belongsToMany('App\Film')->using('App\FilmActor');
+        return $this->belongsToMany('App\Film','film_actors')->using('App\FilmActor');
     }
 }
