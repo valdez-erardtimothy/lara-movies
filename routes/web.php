@@ -18,3 +18,6 @@ Route::get('/', function () {
 });
 
 Route::resource('film', 'FilmController');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
