@@ -10,7 +10,7 @@ class Actor extends Model
     
     public $timestamps=false; 
 
-    public function films() {
-        return $this->belongsToMany('App\Film','film_actors')->using('App\FilmActor');
+    public function film() {
+        return $this->belongsToMany('App\Film','film_actors')->using('App\FilmActor')->withPivot('character', 'role_id');
     }
 }

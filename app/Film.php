@@ -14,7 +14,7 @@ class Film extends Model
     }
 
     public function actor() {
-        return $this->belongsToMany('\App\Actor','film_actors')->using('App\FilmActor');
+        return $this->belongsToMany('\App\Actor','film_actors')->withPivot('character', 'role_id')->using('App\FilmActor');
     }
 
     public function genre() {

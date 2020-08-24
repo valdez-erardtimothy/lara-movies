@@ -15,6 +15,9 @@ class ProducerController extends Controller
     public function index()
     {
         //
+        $data['producers'] = Producer::all();
+        
+        return view('pages.producers.list', $data);
     }
 
     /**
@@ -47,6 +50,9 @@ class ProducerController extends Controller
     public function show(Producer $producer)
     {
         //
+        $data['producer'] = $producer->load('film');
+
+        return view('pages.producers.one', $data);
     }
 
     /**

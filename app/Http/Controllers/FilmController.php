@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Film;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; 
 
 class FilmController extends Controller
 {
@@ -15,6 +15,9 @@ class FilmController extends Controller
     public function index()
     {
         //
+        $data['films'] = Film::with('genre')->get();
+
+        return view('pages.films.list', $data);
     }
 
     /**
@@ -47,6 +50,10 @@ class FilmController extends Controller
     public function show(Film $film)
     {
         //
+        $data['film'] = $film;
+        $data['roles'] = \App\ActorRole::all()->toArray();
+
+        return view('pages.films.one', $data);
     }
 
     /**

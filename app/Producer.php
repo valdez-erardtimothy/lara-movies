@@ -10,6 +10,6 @@ class Producer extends Model
     public $timestamps = false;
 
     public function film() {
-        return $this->belongsToMany('App\Film', 'film_producer');
+        return $this->belongsToMany('App\Film', 'film_producers');
     }
 }

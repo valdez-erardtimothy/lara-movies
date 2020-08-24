@@ -15,6 +15,9 @@ class ActorController extends Controller
     public function index()
     {
         //
+        $data['actors'] = Actor::all();
+
+        return view('pages.actors.list', $data);
     }
 
     /**
@@ -47,6 +50,9 @@ class ActorController extends Controller
     public function show(Actor $actor)
     {
         //
+        $data['actor'] = $actor->load('film');
+        $data['roles'] = \App\ActorRole::all()->toArray();
+        return view('pages.actors.one', $data);
     }
 
     /**

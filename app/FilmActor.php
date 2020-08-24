@@ -11,7 +11,15 @@ class FilmActor extends Pivot
     protected $table = 'film_actors';
 
     public function actorRole() {
-        $this->belongsTo('App\ActorRole');
+        return $this->belongsTo('App\ActorRole');
+    }
+
+    public function film() {
+        return $this->belongsTo(\App\Film::class);
+    }
+    
+    public function actor() {
+        return $this->belongsTo(\App\Actor::class);
     }
     
 }

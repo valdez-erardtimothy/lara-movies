@@ -14,10 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.index');
 });
 
-Route::resource('film', 'FilmController');
+Route::resources([
+    'films' => 'FilmController',
+    'actors' => 'ActorController',
+    'producers' => 'ProducerController'
+]);
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
