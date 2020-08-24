@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Producer;
 use Illuminate\Http\Request;
 
-class Producer extends Controller
+class ProducerController extends Controller
 {
     /**
      * Display a listing of the resource.
