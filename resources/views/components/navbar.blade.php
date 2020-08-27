@@ -5,9 +5,15 @@
         'Films' => "/films",
         'Actors' => "/actors",
         'Producers' => '/producers'
-    ]
+    ];
+
+    // TODO later: navbar items that will only show upon passing admin check
+    $admin_bar_items = [
+        'Genres' => action('GenreController@index'),
+        'Users' => '/users' 
+    ];
 @endphp
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light ">
     <a class="navbar-brand" href="#">Navbar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -19,7 +25,16 @@
                 <a class="nav-link" href="{{ $link }}">{{ $item }}</a>
             </li>
             @endforeach
+
+
+            @foreach ($admin_bar_items as $admin_bar_item => $link)
+            {{-- add admin check --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ $link }}">{{ $admin_bar_item }}</a>
+            </li>
+            @endforeach
         </ul>
+        
         @guest
             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
         @endguest

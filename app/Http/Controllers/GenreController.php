@@ -15,16 +15,22 @@ class GenreController extends Controller
     public function index()
     {
         //
+        $data['genres'] = Genre::with('film')->get();
+
+        return view('pages.genres.list', $data);
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param \Illuminatte\Http\Request $request for session flashdata (form validation)
+     * 
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
         //
+        return view('pages.genres.create');
     }
 
     /**
@@ -36,6 +42,13 @@ class GenreController extends Controller
     public function store(Request $request)
     {
         //
+        $validation = $request->validate([
+            'genre' => 'required|alpha_dash_spaces|max:64'
+        ]);
+        $genre = new Genre();
+        $genre->genre = $validation['genre'];
+        $genre->save();
+        return redirect()->action('GenreController@index')->with('update', "Genre added with ID {$genre->id}!");
     }
 
     /**
@@ -47,6 +60,7 @@ class GenreController extends Controller
     public function show(Genre $genre)
     {
         //
+        return redirect()->action('GenreController@index');
     }
 
     /**
@@ -58,6 +72,7 @@ class GenreController extends Controller
     public function edit(Genre $genre)
     {
         //
+        return view('pages.genres.update', compact('genre'));
     }
 
     /**
@@ -70,6 +85,13 @@ class GenreController extends Controller
     public function update(Request $request, Genre $genre)
     {
         //
+        $old = $genre->genre;
+        $validation = $request->validate([
+            'genre' => 'required|alpha_dash_spaces|max:64'
+        ]);
+        $genre->genre = $validation['genre'];
+        $genre->save();
+        return redirect()->action('GenreController@index')->with('update', "Genre Updated from {$old} -> {$validation['genre']}!");
     }
 
     /**
@@ -81,5 +103,8 @@ class GenreController extends Controller
     public function destroy(Genre $genre)
     {
         //
+        $genre->delete();
+        $old = [$genre->id, $genre->genre];
+        return redirect()->action('GenreController@index')->with('update', "Genre {$genre->id} -> {$genre->genre} has been deleted!");
     }
 }
