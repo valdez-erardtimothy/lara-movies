@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Film extends Model
 {
-    //
-    
+    // for mass assignment
+    protected $fillable = ['film_title', 'story', 'release_date', 'duration', 'additional_info', 'genre_id'];
     public $timestamps = false;
     public function producer() {
         return $this->belongsToMany('App\Producer', 'film_producers');

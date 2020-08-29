@@ -7,6 +7,14 @@
     $films : the film list    
 --}}
 @section('main_content')
+    <h1>
+        Films 
+        <small><a href="{{ action('FilmController@create') }} " class="fas fa-plus"></a></small>
+    </h1>
+    @if (session('alert'))
+    <p class="alert alert-primary">{{ session('alert') }}</p>
+    @endif
+
     <div class='row'>
         @foreach ($films as $film)
         <div class="col-lg-4 col-md-6">

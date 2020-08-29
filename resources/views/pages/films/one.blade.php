@@ -1,6 +1,6 @@
 {{-- 
     required variables:
-    $film :: the film entry    
+    $film :: the film model
     $roles :: actor roles table
 --}}
 
@@ -8,6 +8,11 @@
 
 @section('page_title', $film->film_title )
 @section('main_content')
+
+    @if (session('alert'))
+        <p class="alert alert-primary">{{ session('alert') }}</p>
+    @endif
+
     <div class="row ">
         <div class="col-lg-5">
             <figure>
@@ -16,7 +21,11 @@
         </div>
         <div class="col-lg-7">
             <h3>{{ $film->film_title }}
-            <small><i class="fas fa-edit" title="edit"></i> <i class="fas fa-trash" title="delete"></i></small></h3>
+                <small>
+                    <a href='{{ action('FilmController@edit', $film) }}' class="fas fa-edit" title="edit"></a> 
+                    <a href='{{ route('films.delete', $film) }}' class="fas fa-trash" title="delete"></a>
+                </small>
+            </h3>
             <p>{{ $film->genre->genre }}</p>
             <p>{{ $film->duration }} minutes</p>
             <p>Released {{ $film->release_date }}</p>

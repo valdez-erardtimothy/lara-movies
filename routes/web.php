@@ -21,7 +21,7 @@ Route::get('/', function () {
 Route::get('/genres/{genre}/delete/', 'GenreController@destroy')->name('genres.delete');
 Route::get('/actors/{actor}/delete', 'ActorController@destroy')->name('actors.delete');
 Route::get('/producers/{producer}/delete', 'ProducerController@destroy')->name('producers.delete');
-Route::get('/films/{film}/delete/', 'GenreController@destroy')->name('films.delete');
+Route::get('/films/{film}/delete/', 'FilmController@destroy')->name('films.delete');
 Route::resources([
     'films' => 'FilmController',
     'actors' => 'ActorController',
