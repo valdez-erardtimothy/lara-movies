@@ -1,0 +1,6 @@
+"COMPONENTS" folder isn't meant to contain blade view components.
+This folder contains small blade views that aren't meant to stand alone.
+views at "pages" folder are standalone pages that @include from components folder
+
+I haven't saw the blade components yet as of naming this folder
+please do not confuse.

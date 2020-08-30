@@ -14,5 +14,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.index');
 });
+
+// delete aliases to allow for anchor link deletion
+Route::get('/genres/{genre}/delete/', 'GenreController@destroy')->name('genres.delete');
+Route::get('/actors/{actor}/delete', 'ActorController@destroy')->name('actors.delete');
+Route::get('/producers/{producer}/delete', 'ProducerController@destroy')->name('producers.delete');
+Route::get('/films/{film}/delete/', 'FilmController@destroy')->name('films.delete');
+Route::resources([
+    'films' => 'FilmController',
+    'actors' => 'ActorController',
+    'producers' => 'ProducerController',
+    'genres' => 'GenreController'
+]);
+// Route::resource('films', 'FilmController')->except('destroy');
+// Route::resource('actors', 'ActorController')->except('destroy');
+// Route::resource('producers', 'ProducerController')->except('destroy');
+// Route::resource('genres', 'GenreController')->except('destroy');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
