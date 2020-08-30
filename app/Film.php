@@ -3,12 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Film extends Model
 {
     // for mass assignment
     protected $fillable = ['film_title', 'story', 'release_date', 'duration', 'additional_info', 'genre_id'];
+
     public $timestamps = false;
+    use SoftDeletes;
     public function producer() {
         return $this->belongsToMany('App\Producer', 'film_producers');
     }
