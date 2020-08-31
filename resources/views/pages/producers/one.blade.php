@@ -3,6 +3,9 @@
 @section('name', "{{ $producer->producer_fullname }}")
 
 @section('main_content')
+    @if (session('update'))
+        <p class="alert alert-primary"> {{ session('update') }}</p>
+    @endif
     <div class="row">
         <div class="col-sm-6">
             <h2>{{ $producer->producer_fullname }}</h2>
@@ -21,7 +24,12 @@
             <ul class="list-group">
                 <li class="list-group-item">Actions</li>
                 <li class="list-group-item list-group-item-action"><a href="{{ action('ProducerController@edit', $producer) }}">Edit <i class="fas fa-edit"></i></a></li>
-                <li class="list-group-item list-group-item-action"><a href="{{ action('ProducerController@destroy', $producer) }}">Delete <i class="fas fa-trash"></i></a></li>
+                <li class="list-group-item list-group-item-action">
+                    <a 
+                    href="{{ route('producers.delete', $producer) }}" 
+                    onclick="return confirm('delete {{ $producer->producer_fullname }}? THIS PROCESS IS IRREVERSIBLE.') ">Delete <i class="fas fa-trash"></i>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

@@ -8,7 +8,10 @@
 
 
 @section('main_content')
-    <h1>Producers <small><a href="" class="fas fa-plus"></a><small></h1>
+    <h1>Producers <small><a href="{{ action('ProducerController@create') }}" class="fas fa-plus"></a></small></h1>
+        @if (session('update'))
+            <p class="alert alert-primary"> {{ session('update') }}</p>
+        @endif
     <table class="table table-striped">
         <thead>
             <tr>
@@ -27,7 +30,12 @@
                 <td><a href="{{ $producer->website }}"> {{ $producer->website }}</a></td>
                 <td><a href="{{ action('ProducerController@show', $producer) }}" class="fas fa-eye"></a></td>
                 <td><a href="{{ action('ProducerController@edit', $producer) }}" class="fas fa-edit"></a></td>
-                <td><a href="{{ action('ProducerController@destroy', $producer) }}" class="fas fa-trash"></a></td>
+                <td>
+                    <a href="{{ route('producers.delete', $producer) }}" 
+                    onclick="return confirm('delete {{ $producer->producer_fullname }}? THIS PROCESS IS IRREVERSIBLE.') " 
+                    class="fas fa-trash">
+                    </a>
+                </td>
             </tr>
         @endforeach
     </table>

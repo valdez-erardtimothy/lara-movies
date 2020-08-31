@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Producer;
 use Illuminate\Http\Request;
+use ProducerSeeder;
 
 class ProducerController extends Controller
 {
@@ -28,6 +29,7 @@ class ProducerController extends Controller
     public function create()
     {
         //
+        return view('pages.producers.create');
     }
 
     /**
@@ -39,6 +41,13 @@ class ProducerController extends Controller
     public function store(Request $request)
     {
         //
+        $producer = new Producer();
+        $producer->producer_fullname = $request->producer_fullname;
+        $producer->email = $request->email;
+        $producer->website = $request->website;
+        $producer->save();
+
+        return redirect()->action('ProducerController@show', $producer)->with('update', 'producer added.');
     }
 
     /**
@@ -64,6 +73,7 @@ class ProducerController extends Controller
     public function edit(Producer $producer)
     {
         //
+        return view('pages.producers.update', compact('producer'));
     }
 
     /**
@@ -76,6 +86,12 @@ class ProducerController extends Controller
     public function update(Request $request, Producer $producer)
     {
         //
+        $producer->producer_fullname = $request->producer_fullname;
+        $producer->email = $request->email;
+        $producer->website = $request->website;
+        $producer->save();
+
+        return redirect()->action('ProducerController@show', $producer)->with('update', 'producer updated.');
     }
 
     /**
@@ -87,5 +103,8 @@ class ProducerController extends Controller
     public function destroy(Producer $producer)
     {
         //
+        $producer->film()->detach(); // remove fks
+        $producer->delete();
+        return redirect()->action('ProducerController@index')->with('update', "{$producer->producer_fullname} has been permanently deleted.");
     }
 }
