@@ -28,6 +28,7 @@ class ActorController extends Controller
     public function create()
     {
         //
+        return view('pages.actors.create');
     }
 
     /**
@@ -39,6 +40,13 @@ class ActorController extends Controller
     public function store(Request $request)
     {
         //
+        $validated_data = $this->form_validation($request);
+        $actor = new Actor();
+        $actor->actor_fullname = $request->actor_fullname;
+        $actor->actor_notes = $request->actor_notes;
+        $actor->save();
+
+        return redirect()->action('ActorController@show', $actor)->with('update', 'Actor Successfully added!');
     }
 
     /**
@@ -64,6 +72,7 @@ class ActorController extends Controller
     public function edit(Actor $actor)
     {
         //
+        return view('pages.actors.update', compact('actor'));
     }
 
     /**
@@ -76,6 +85,12 @@ class ActorController extends Controller
     public function update(Request $request, Actor $actor)
     {
         //
+        $validated_data = $this->form_validation($request);
+        $actor->actor_fullname = $request->actor_fullname;
+        $actor->actor_notes = $request->actor_notes;
+        $actor->save();
+        return redirect()->action('ActorController@show', $actor)->with('update', 'Actor Successfully updated!');
+        
     }
 
     /**
@@ -87,5 +102,21 @@ class ActorController extends Controller
     public function destroy(Actor $actor)
     {
         //
+        $actor->delete();
+        $actor->save();
+        return redirect()->action('ActorController@index')->with('update', "{$actor->actor_fullname} entry removed!");
+    }
+
+    /**
+     * 
+     * @param \Illuminate\Http\Request $request The request variable passed on the calling function
+     * 
+     * @return array the validated data -- the automicatic redirect fires upon failure  
+     */
+    private function form_validation(Request $request) {
+        return $request->validate([
+            'actor_fullname' => 'required|alpha_dash_spaces|max:128',
+            'actor_notes' => 'nullable'
+        ]);
     }
 }

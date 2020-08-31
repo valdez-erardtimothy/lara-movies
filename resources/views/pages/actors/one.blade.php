@@ -8,6 +8,9 @@
 
 @section('page_title', $actor->actor_fullname )
 @section('main_content')
+    @if (session('update'))
+        <p class="alert alert-primary">{{ session('update') }}</p>
+    @endif
     <div class="row ">
         <div class="col-lg-5">
             <figure>
@@ -16,7 +19,11 @@
         </div>
         <div class="col-lg-7">
             <h3>{{ $actor->actor_fullname }}
-            <small><i class="fas fa-edit" title="edit"></i> <i class="fas fa-trash" title="delete"></i></small></h3>
+                <small>
+                    <a href="{{ action('ActorController@edit', $actor) }}" class="fas fa-edit" title="edit"></a> 
+                    <a href="{{ route('actors.delete', $actor) }}"class="fas fa-trash" title="delete"></a>
+                </small>
+            </h3>
             <p>Info: {{ $actor->actor_notes }}</p>
         </div>
     </div>
