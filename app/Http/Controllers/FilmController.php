@@ -24,6 +24,26 @@ class FilmController extends Controller
     }
 
     /**
+     * Display the list of all soft-deleted film entries
+     */
+    public function deleted() {
+        $films = Film::onlyTrashed()->get();
+
+        return view('pages.films.deleted', compact('films'));
+    }
+
+    /**
+     * restore a soft-deleted film entry
+     * @param int $id -- the ID of deleted film to restore
+     */
+    public function restore($id) {
+        $film = Film::onlyTrashed()->find($id);
+        $film->restore();
+        return redirect()->action('FilmController@deleted')->with('update', "{$film->film_title} (ID: {$film->id})  has been restored.");
+    }
+
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -50,7 +70,7 @@ class FilmController extends Controller
         // dd($validated_data);
         $film = new Film($validated_data);
         $film->save();
-        return redirect()->action('FilmController@show', [$film])->with('alert', 'Film successfully added!');
+        return redirect()->action('FilmController@show', [$film])->with('update', 'Film successfully added!');
     }
 
     /**
@@ -121,7 +141,7 @@ class FilmController extends Controller
         $film->genre_id = $validated_data['genre_id'];
         $film->save();
 
-        return redirect()->action('FilmController@show', [$film])->with('alert', 'Film edited!');
+        return redirect()->action('FilmController@show', [$film])->with('update', 'Film edited!');
     }
 
     /**
@@ -134,7 +154,7 @@ class FilmController extends Controller
     {
         //
         $film->delete();
-        return redirect()->action('FilmController@index')->with('alert', "$film->film_title has been deleted.");
+        return redirect()->action('FilmController@index')->with('update', "$film->film_title has been deleted.");
     }
 
     public function detachActor(Film $film, \App\Actor $actor) {

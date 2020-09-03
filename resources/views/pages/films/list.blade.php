@@ -10,9 +10,10 @@
     <h1>
         Films 
         <small><a href="{{ action('FilmController@create') }} " class="fas fa-plus"></a></small>
+        <small><a href="{{ action('FilmController@deleted') }}">Deleted Records</a></small>
     </h1>
-    @if (session('alert'))
-    <p class="alert alert-primary">{{ session('alert') }}</p>
+    @if (session('update'))
+    <p class="alert alert-primary">{{ session('update') }}</p>
     @endif
 
     <div class='row'>

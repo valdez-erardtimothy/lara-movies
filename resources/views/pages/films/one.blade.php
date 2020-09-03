@@ -9,8 +9,8 @@
 @section('page_title', $film->film_title )
 @section('main_content')
 
-    @if (session('alert'))
-        <p class="alert alert-primary">{{ session('alert') }}</p>
+    @if (session('update'))
+        <p class="alert alert-primary">{{ session('update') }}</p>
     @endif
 
     <div class="row ">

@@ -49,6 +49,25 @@ class ActorController extends Controller
         return redirect()->action('ActorController@show', $actor)->with('update', 'Actor Successfully added!');
     }
 
+     /**
+     * Display the list of all soft-deleted actor entries
+     */
+    public function deleted() {
+        $actors = Actor::onlyTrashed()->get();
+
+        return view('pages.actors.deleted', compact('actors'));
+    }
+
+    /**
+     * restore a soft-deleted film entry
+     * @param int $id -- the ID of deleted film to restore
+     */
+    public function restore($id) {
+        $actor = Actor::onlyTrashed()->find($id);
+        $actor->restore();
+        return redirect()->action('ActorController@deleted')->with('update', "{$actor->actor_fullname} (ID: {$actor->id})  has been restored.");
+    }
+
     /**
      * Display the specified resource.
      *

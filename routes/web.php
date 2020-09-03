@@ -23,6 +23,12 @@ Route::post('films/attach_actor', 'FilmController@attachActor')->name('films.act
 Route::get('films/{film}/detach_producer/{producer}', 'FilmController@detachProducer')->name('films.producers.detach');
 Route::post('films/attach_producer', 'FilmController@attachProducer')->name('films.producers.attach');
 
+// soft-deletions and restore
+Route::get('films/deleted',  'FilmController@deleted')->name('films.deleted');
+Route::get('films/{id}/restore',  'FilmController@restore')->name('films.restore');
+Route::get('actors/deleted',  'ActorController@deleted')->name('actors.deleted');
+Route::get('acotrs/{id}/restore',  'ActorController@restore')->name('actors.restore');
+
 // delete aliases to allow for anchor link deletion
 Route::get('/actorroles/{actorrole}/delete/', 'ActorRoleController@destroy')->name('actorroles.delete');
 Route::get('/genres/{genre}/delete/', 'GenreController@destroy')->name('genres.delete');

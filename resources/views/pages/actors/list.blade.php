@@ -9,6 +9,7 @@
 @section('main_content')
     <h1>Actors
         <a href="{{ action('ActorController@create') }}"><small class="fas fa-plus"></small></a>
+        <a href="{{ action('ActorController@deleted') }}"><small>Deleted</small></a>
     </h1>
     <div class='row'>
         @foreach ($actors as $actor)
