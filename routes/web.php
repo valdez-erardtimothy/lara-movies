@@ -24,6 +24,7 @@ Route::get('films/{film}/detach_producer/{producer}', 'FilmController@detachProd
 Route::post('films/attach_producer', 'FilmController@attachProducer')->name('films.producers.attach');
 
 // delete aliases to allow for anchor link deletion
+Route::get('/actorroles/{actorrole}/delete/', 'ActorRoleController@destroy')->name('actorroles.delete');
 Route::get('/genres/{genre}/delete/', 'GenreController@destroy')->name('genres.delete');
 Route::get('/actors/{actor}/delete', 'ActorController@destroy')->name('actors.delete');
 Route::get('/producers/{producer}/delete', 'ProducerController@destroy')->name('producers.delete');
@@ -34,6 +35,7 @@ Route::resources([
     'producers' => 'ProducerController',
     'genres' => 'GenreController'
 ]);
+Route::resource('actorroles', 'ActorRoleController')->except('show');
 // Route::resource('films', 'FilmController')->except('destroy');
 // Route::resource('actors', 'ActorController')->except('destroy');
 // Route::resource('producers', 'ProducerController')->except('destroy');

@@ -26,7 +26,11 @@
                     <a href='{{ route('films.delete', $film) }}' class="fas fa-trash" title="delete"></a>
                 </small>
             </h3>
-            <p>{{ $film->genre->genre }}</p>
+            @if (isset($film->genre) && $film->genre)
+                <p>{{ $film->genre->genre }}</p>
+            @else
+                <p>None</p>
+            @endif
             <p>{{ $film->duration }} minutes</p>
             <p>Released {{ $film->release_date }}</p>
         </div>
@@ -53,7 +57,11 @@
                         <tr>
                             <td><a href="/actors/{{ $actor->id }}">{{ $actor->actor_fullname }}</a></td>
                             <td>{{ $actor->pivot->character }}</td>
+                            @if (isset($actor->pivot->role_id)&& $actor->pivot->role_id)
                             <td>{{ $roles[$actor->pivot->role_id] }}</td>
+                            @else
+                            <td>Null</td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

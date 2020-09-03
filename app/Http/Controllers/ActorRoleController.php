@@ -15,6 +15,9 @@ class ActorRoleController extends Controller
     public function index()
     {
         //
+        $actorroles =  ActorRole::all();
+
+        return view('pages.actorroles.list', compact('actorroles'));
     }
 
     /**
@@ -25,6 +28,7 @@ class ActorRoleController extends Controller
     public function create()
     {
         //
+        return view('pages.actorroles.create');
     }
 
     /**
@@ -36,15 +40,21 @@ class ActorRoleController extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $this->form_validation($request);
+        $actorrole = new ActorRole();
+        $actorrole->role= $validated['role'];
+        $actorrole->save();
+        
+        return redirect()->action('ActorRoleController@index')->with('update', 'Role added!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\ActorRole  $actorRole
+     * @param  \App\ActorRole  $actorrole
      * @return \Illuminate\Http\Response
      */
-    public function show(ActorRole $actorRole)
+    public function show(ActorRole $actorrole)
     {
         //
     }
@@ -52,12 +62,13 @@ class ActorRoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ActorRole  $actorRole
+     * @param  \App\ActorRole  $actorrole
      * @return \Illuminate\Http\Response
      */
-    public function edit(ActorRole $actorRole)
+    public function edit(ActorRole $actorrole)
     {
         //
+        return view('pages.actorroles.update', compact('actorrole'));
     }
 
     /**
@@ -67,9 +78,13 @@ class ActorRoleController extends Controller
      * @param  \App\ActorRole  $actorRole
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ActorRole $actorRole)
+    public function update(Request $request, ActorRole $actorrole)
     {
-        //
+        $validated = $this->form_validation($request);
+        $actorrole->role= $validated['role'];
+        $actorrole->save();
+        
+        return redirect()->action('ActorRoleController@index')->with('update', 'Role added!');
     }
 
     /**
@@ -78,8 +93,17 @@ class ActorRoleController extends Controller
      * @param  \App\ActorRole  $actorRole
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ActorRole $actorRole)
+    public function destroy(ActorRole $actorrole)
     {
         //
+        $actorrole->delete();
+
+        return redirect()->action('ActorRoleController@index')->with('update', 'Role deleted!');
+    }
+
+    private function form_validation(Request $request) {
+        return $request->validate([
+            'role' => 'required'
+        ]);
     }
 }

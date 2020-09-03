@@ -9,6 +9,7 @@
 
     // TODO later: navbar items that will only show upon passing admin check
     $admin_bar_items = [
+        'Actor Roles' => action('ActorRoleController@index'),
         'Genres' => action('GenreController@index'),
         'Users' => '/users' 
     ];

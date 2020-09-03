@@ -54,7 +54,11 @@
                         <tr data-actor-id={{ $actor->id }} data-character-name="{{ $actor->pivot->character }}">
                             <td><a href="/actors/{{ $actor->id }}">{{ $actor->id }}-{{ $actor->actor_fullname }}</a></td>
                             <td>{{ $actor->pivot->character }}</td>
+                            @if (isset($actor->pivot->role_id)&& $actor->pivot->role_id)
                             <td>{{ $roles[$actor->pivot->role_id] }}</td>
+                            @else
+                            <td>Null</td>
+                            @endif
                             <td><button class="btn btn-primary fas fa-edit edit-actor"></button></td>
                             <td><a href="{{ route('films.actors.detach', [$film, $actor]) }}" class="fas fa-trash btn btn-primary"></a></td>
                         </tr>

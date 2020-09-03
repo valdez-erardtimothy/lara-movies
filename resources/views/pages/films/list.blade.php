@@ -22,7 +22,10 @@
                 <img class="card-img-top" src="..." alt="{{ $film->film_title }} Poster">
                 <div class="card-body">
                 <h5 class="card-title">{{ $film->film_title }}</h5>
-                <p class="card-text">{{ $film->genre->genre }} -- {{ $film->duration }} minutes</p>
+                @if (isset($film->genre->genre))
+                    <p class="card-text">{{ $film->genre->genre }}</p>
+                @endif
+                <p class="card-text">{{ $film->duration }} minutes</p>
                 <a href="{{ action('FilmController@show', $film) }}" class="btn btn-primary">More Details</a>
                 </div>
             </div>
