@@ -59,7 +59,9 @@ class ActorController extends Controller
     {
         //
         $data['actor'] = $actor->load('film');
-        $data['roles'] = \App\ActorRole::all()->toArray();
+        $data['roles'] = \App\ActorRole::all()->mapWithKeys(function($role) {
+            return[$role['id']=>$role['role']];
+        });
         return view('pages.actors.one', $data);
     }
 

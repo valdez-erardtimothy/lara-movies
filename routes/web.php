@@ -17,6 +17,12 @@ Route::get('/', function () {
     return view('pages.index');
 });
 
+//detaching and attaching actors and producers 
+Route::get('films/{film}/detach_actor/{actor}', 'FilmController@detachActor')->name('films.actors.detach');
+Route::post('films/attach_actor', 'FilmController@attachActor')->name('films.actors.attach');
+Route::get('films/{film}/detach_producer/{producer}', 'FilmController@detachProducer')->name('films.producers.detach');
+Route::post('films/attach_producer', 'FilmController@attachProducer')->name('films.producers.attach');
+
 // delete aliases to allow for anchor link deletion
 Route::get('/genres/{genre}/delete/', 'GenreController@destroy')->name('genres.delete');
 Route::get('/actors/{actor}/delete', 'ActorController@destroy')->name('actors.delete');

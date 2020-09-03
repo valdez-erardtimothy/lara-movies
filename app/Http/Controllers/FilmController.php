@@ -63,7 +63,9 @@ class FilmController extends Controller
     {
         //
         $data['film'] = $film;
-        $data['roles'] = \App\ActorRole::all()->toArray();
+        $data['roles'] = \App\ActorRole::all()->mapWithKeys(function($role) {
+            return[$role['id']=>$role['role']];
+        });
 
         return view('pages.films.one', $data);
     }
@@ -81,7 +83,22 @@ class FilmController extends Controller
         $genres= Genre::all()->mapWithKeys(function($genre) {
             return [$genre['id']=>$genre['genre']];
         });
-        return view('pages.films.update', compact('film', 'genres'));
+        $roles = \App\ActorRole::all()->mapWithKeys(function($role) {
+            return[$role['id']=>$role['role']];
+        });
+        $actors = \App\Actor::all()->mapWithKeys(function($actor) {
+            return[$actor['id']=>"$actor[actor_fullname] ($actor[id])"];
+        });
+        // get only the producers not currently attached to the film
+        $film_id = $film->id;
+        $producers = \App\Producer::whereDoesntHave('film', function($q) use ($film_id) {
+            $q->where('id', $film_id);
+        })->get()->mapWithKeys(function($producer) {
+            return [$producer['id']=>"$producer[producer_fullname] ($producer[id])"];
+        });
+        unset($film_id);
+
+        return view('pages.films.update', compact('film', 'actors', 'genres', 'roles', 'producers'));
     }
 
     /**
@@ -118,6 +135,50 @@ class FilmController extends Controller
         //
         $film->delete();
         return redirect()->action('FilmController@index')->with('alert', "$film->film_title has been deleted.");
+    }
+
+    public function detachActor(Film $film, \App\Actor $actor) {
+        $film->actor()->detach($actor);
+        return redirect()->back()->with('update', 'Character deleted');
+    }
+    
+    /** 
+     * Add or update film-actor relationship
+     */
+    public function attachActor(Request $request) {
+        $validated = $request->validate([
+            'film_id' => 'required|exists:\App\Film,id',
+            'actor_id' => 'required|exists:\App\Actor,id',
+            'role_id' => 'required|exists:\App\ActorRole,id',
+            'character' => 'required'
+        ]);
+        $film = Film::find($validated['film_id']);
+        $film->actor()->syncWithoutDetaching([
+            $validated['actor_id'] => [
+            'role_id' => $validated['role_id'],
+            'character' => $validated['character']
+            ]
+        ]);
+
+        return redirect()->back()->with('update', 'Actor attached!');
+    }
+
+    public function detachProducer(Film $film, \App\Producer $producer ) {
+        $film->producer()->detach($producer);
+        
+        return redirect()->back()->with('update', 'Producer detached!');
+    }
+
+    public function attachProducer(Request $request) {
+        $validated = $request->validate([
+            'film_id' =>'required|exists:\App\Film,id',
+            'producer_id' => 'required|exists:\App\Producer,id'
+        ]);
+
+        $film = Film::find($validated['film_id']);
+        $film->producer()->attach($validated['producer_id']);
+        
+        return redirect()->back()->with('update', 'Producer attached!');
     }
 
     /**

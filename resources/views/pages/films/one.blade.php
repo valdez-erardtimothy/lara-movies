@@ -53,7 +53,7 @@
                         <tr>
                             <td><a href="/actors/{{ $actor->id }}">{{ $actor->actor_fullname }}</a></td>
                             <td>{{ $actor->pivot->character }}</td>
-                            <td>{{ $roles[$actor->pivot->role_id-1]['role'] }}</td>
+                            <td>{{ $roles[$actor->pivot->role_id] }}</td>
                         </tr>
                     @endforeach
                 </tbody>

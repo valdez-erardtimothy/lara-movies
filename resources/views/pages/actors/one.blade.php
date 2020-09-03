@@ -44,7 +44,7 @@
                         <tr>
                             <td><a href="{{ action('FilmController@show', $film) }}"> {{ $film->film_title }}</a></td>
                             <td>{{ $film->pivot->character }}</td>
-                            <td>{{ $roles[$film->pivot->role_id-1]['role'] }}</td>
+                            <td>{{ $roles[$film->pivot->role_id] }}</td>
                         </tr>
                     @endforeach
                 </tbody>
