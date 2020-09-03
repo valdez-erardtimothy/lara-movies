@@ -4,7 +4,7 @@
 
 {{-- 
     required variables:
-    $films : the actor list    
+    $actors : the actor list    
 --}}
 @section('main_content')
     <h1>Actors
