@@ -112,6 +112,9 @@
                 <div class="form-group">
                     {!! Form::label("comment", "Comment", $rating, ['class'=>'form-label']) !!}
                     {!! Form::textarea("comment", $comment, ['class'=>"form-control"]) !!}
+                    @error('comment')
+                        <p class="alert alert-danger"> {{ $message }}</p>
+                    @enderror
                 </div>
                 {!! Form::submit("Rate/Update Rating", ["class"=>"btn btn-primary"]) !!}
                 {!! Form::close() !!}
@@ -122,16 +125,16 @@
     <hr/>
     @foreach ($film->user as $user)
     @php 
-        if ($user->id == Auth::user()->id) {
+        if (Auth::check() && $user->id == Auth::user()->id) {
             continue;
         }
     @endphp
         <div class="border border-secondary p-3">
             <p>{{ $user->name }} <small>Rating: {{ $user->pivot->rating }} out of 5</small></p>
-            <p>comment</p>
             <div class="blockquote">
                 <p>{{ $user->pivot->comment }}</p>
             </div>
         </div>
     @endforeach
+    <hr>
 @endsection

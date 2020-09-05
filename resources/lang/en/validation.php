@@ -120,6 +120,7 @@ return [
 
     // Custom Validation message.
     'alpha_dash_spaces'         => 'The :attribute may only contain letters, dashes, and spaces.', 
+    'profanity' => 'You seem to use profanity in :attribute. Please remember to be nice!',
     
     /*
     |--------------------------------------------------------------------------

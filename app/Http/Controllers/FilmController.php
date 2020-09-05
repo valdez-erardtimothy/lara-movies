@@ -211,7 +211,7 @@ class FilmController extends Controller
     public function rateFilm(Request $request, Film $film) {
         $validated = $request->validate([
             'rating' => 'required|integer|between:1,5',
-            'comment' => 'nullable'
+            'comment' => 'nullable|profanity'
         ]);
 
         $film->user()->syncWithoutDetaching([Auth::user()->id => [
