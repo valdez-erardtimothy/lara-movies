@@ -77,7 +77,13 @@ class ProducerController extends Controller
     public function edit(Producer $producer)
     {
         //
-        return view('pages.producers.update', compact('producer'));
+        $producer_id = $producer->id;
+        $films = \App\Film::whereDoesntHave('producer', function($q) use ($producer_id) {
+            $q->where('id', $producer_id);
+        })->get()->mapWithKeys(function($film) {
+            return [$film['id']=>"$film[film_title] ($film[id])"];
+        });
+        return view('pages.producers.update', compact('producer', 'films'));
     }
 
     /**

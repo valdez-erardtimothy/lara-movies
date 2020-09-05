@@ -134,7 +134,7 @@
     </div>
 </div>
     
-<!-- Modal for actor add form -->
+<!-- Modal for producer add form -->
 <div class="modal fade" id="addProducerModal" tabindex="-1" role="form" aria-labelledby="producerModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         {!! Form::open(['route'=>'films.producers.attach', 'method'=>'POST']) !!}

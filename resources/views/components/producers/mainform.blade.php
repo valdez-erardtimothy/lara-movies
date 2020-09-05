@@ -20,3 +20,4 @@
 </div>
 
 {!! Form::submit($submit_button, ['class'=> 'btn btn-primary']) !!}
+{!! Form::close() !!}

@@ -49,7 +49,11 @@
                         <tr>
                             <td><a href="{{ action('FilmController@show', $film) }}"> {{ $film->film_title }}</a></td>
                             <td>{{ $film->pivot->character }}</td>
+                            @if (isset($film->pivot->role_id)&& $film->pivot->role_id)
                             <td>{{ $roles[$film->pivot->role_id] }}</td>
+                            @else
+                            <td>Null</td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

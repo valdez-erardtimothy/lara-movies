@@ -102,7 +102,13 @@ class ActorController extends Controller
     public function edit(Actor $actor)
     {
         //
-        return view('pages.actors.update', compact('actor'));
+        $roles = \App\ActorRole::all()->mapWithKeys(function($role) {
+            return[$role['id']=>$role['role']];
+        });
+        $films = \App\Film::all()->mapWithKeys(function($film) {
+            return[$film['id']=>"$film[film_title] ($film[id])"];
+        });
+        return view('pages.actors.update', compact('actor', 'films', 'roles'));
     }
 
     /**
