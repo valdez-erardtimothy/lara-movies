@@ -14,7 +14,7 @@ class ActorSeeder extends Seeder
         //
         $faker = \Faker\Factory::create();
         $faker->addProvider(new \Xylis\FakerCinema\Provider\Person($faker));
-        for($i = 0; $i<1000; $i++) {
+        for($i = 0; $i<50; $i++) {
             \App\Actor::create([
                 'actor_fullname' => $faker->actor,
                 'actor_notes' => $faker->sentence()

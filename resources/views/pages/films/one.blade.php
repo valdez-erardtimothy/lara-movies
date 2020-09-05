@@ -129,7 +129,7 @@
             continue;
         }
     @endphp
-        <div class="border border-secondary p-3">
+        <div class="border border-secondary p-3 mb-3 mt-1">
             <p>{{ $user->name }} <small>Rating: {{ $user->pivot->rating }} out of 5</small></p>
             <div class="blockquote">
                 <p>{{ $user->pivot->comment }}</p>

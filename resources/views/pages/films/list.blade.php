@@ -20,7 +20,7 @@
         @foreach ($films as $film)
         <div class="col-lg-4 col-md-6">
             <div class="card" >
-                <img class="card-img-top" src="..." alt="{{ $film->film_title }} Poster">
+                <img class="card-img-top" src="{{ $film->getFirstMediaUrl() }}" width="100%">
                 <div class="card-body">
                 <h5 class="card-title">{{ $film->film_title }}</h5>
                 @if (isset($film->genre->genre))
