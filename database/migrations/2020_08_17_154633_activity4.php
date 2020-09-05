@@ -71,6 +71,7 @@ class Activity4 extends Migration
     private function createFilmRatingsTable() { 
         Schema::create('film_ratings', function (Blueprint $table) {
             $table->foreignId('film_id')->constrained('films')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
             $table->smallInteger('rating')->default(3);
             $table->text('comment')->nullable()->default('');
             // TODO: user_id FK

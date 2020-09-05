@@ -6,6 +6,7 @@ use App\Film;
 use App\Genre;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request; 
+use Illuminate\Support\Facades\Auth;
 
 
 class FilmController extends Controller
@@ -82,6 +83,7 @@ class FilmController extends Controller
     public function show(Film $film)
     {
         //
+        $film->load('actor', 'user');
         $data['film'] = $film;
         $data['roles'] = \App\ActorRole::all()->mapWithKeys(function($role) {
             return[$role['id']=>$role['role']];
@@ -199,6 +201,30 @@ class FilmController extends Controller
         $film->producer()->attach($validated['producer_id']);
         
         return redirect()->back()->with('update', 'Producer attached!');
+    }
+
+    /**
+     * Rate the film. 
+     * User is fetched via Auth.
+     * @param Film $film the film to rate
+     */
+    public function rateFilm(Request $request, Film $film) {
+        $validated = $request->validate([
+            'rating' => 'required|integer|between:1,5',
+            'comment' => 'nullable'
+        ]);
+
+        $film->user()->syncWithoutDetaching([Auth::user()->id => [
+            'rating' => $validated['rating'],
+            'comment' => $validated['comment']
+        ]]);
+        $film->save();
+        return redirect()->action('FilmController@show', $film)->with('update', "Film Rated.");
+    }
+
+    public function unrateFilm(Film $film) {
+        $film->user()->detach(Auth::user());
+        return redirect()->action('FilmController@show', $film)->with('update', "Film Rating removed.");
     }
 
     /**

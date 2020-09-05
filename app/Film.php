@@ -23,4 +23,8 @@ class Film extends Model
     public function genre() {
         return $this->belongsTo('App\Genre');
     }
+
+    public function user() {
+        return $this->belongsToMany('\App\user','film_ratings')->withPivot('rating', 'comment');
+    }
 }

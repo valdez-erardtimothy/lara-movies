@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +36,10 @@ class AppServiceProvider extends ServiceProvider
             // /u to force utf-8
             return preg_match('/^[\pL\s-]+$/u', $value); 
     
+        });
+
+        Blade::if('admin', function () {
+            return Auth::check() && (bool)Auth::user()->is_admin;
         });
     }
 }

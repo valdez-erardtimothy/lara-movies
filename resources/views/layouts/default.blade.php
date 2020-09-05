@@ -21,6 +21,7 @@
         <div class="container">
             @include('components.navbar')
             @yield('main_content')
+            @include('components.footer')
         </div>
         
         {{-- scripts --}}

@@ -53,7 +53,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($film->actor()->get() as $actor)
+                    @foreach ($film->actor as $actor)
                         <tr>
                             <td><a href="/actors/{{ $actor->id }}">{{ $actor->actor_fullname }}</a></td>
                             <td>{{ $actor->pivot->character }}</td>
@@ -79,4 +79,59 @@
             </table>
         </div>
     </div>
+    
+    <h4>Ratings</h4>
+    <div class="border border-primary p-3">
+        @guest
+            <p>Please <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a> in to rate this film!</p>
+        @else
+            @php
+                $cur_user = $film->user()->find(Auth::user());
+                $pivot = $cur_user?$cur_user->pivot:null;
+                $rating=$pivot?$pivot->rating:null;
+                $comment=$pivot?$pivot->comment:null;            
+            @endphp
+            @if ($pivot)
+                <h5>You have already rated this film. <a href="{{ route('films.unrate', $film) }}" class="fas fa-trash" title="Delete your rating">Submit a new one</a></h5>
+                <p>Rated {{ $rating }} out of 5</p>
+                <p>Your comment:</p>
+                <blockquote class="blockquote">
+                    <p class="mb-0">{{ $comment }}</p>
+                </blockquote>
+                
+            @else
+                <h5>Submit your rating now!</h5>
+                {!! Form::open(['route'=>['films.rate', $film], 'method'=>'POST']) !!}
+                <div class="form-group">
+                    {!! Form::label("rating", "Rating", ["class"=>"form-label"]) !!}
+                    {!! Form::select("rating", ['1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5',], ['class'=>'form-control', 'required']) !!}
+                    @error('rating')
+                        <p class="alert alert-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    {!! Form::label("comment", "Comment", $rating, ['class'=>'form-label']) !!}
+                    {!! Form::textarea("comment", $comment, ['class'=>"form-control"]) !!}
+                </div>
+                {!! Form::submit("Rate/Update Rating", ["class"=>"btn btn-primary"]) !!}
+                {!! Form::close() !!}
+            @endif
+            
+        @endguest
+    </div>
+    <hr/>
+    @foreach ($film->user as $user)
+    @php 
+        if ($user->id == Auth::user()->id) {
+            continue;
+        }
+    @endphp
+        <div class="border border-secondary p-3">
+            <p>{{ $user->name }} <small>Rating: {{ $user->pivot->rating }} out of 5</small></p>
+            <p>comment</p>
+            <div class="blockquote">
+                <p>{{ $user->pivot->comment }}</p>
+            </div>
+        </div>
+    @endforeach
 @endsection
