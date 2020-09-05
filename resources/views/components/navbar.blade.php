@@ -28,12 +28,14 @@
             @endforeach
 
 
+            @admin
             @foreach ($admin_bar_items as $admin_bar_item => $link)
             {{-- add admin check --}}
             <li class="nav-item">
                 <a class="nav-link" href="{{ $link }}">{{ $admin_bar_item }}</a>
             </li>
             @endforeach
+            @endadmin
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('contact-admin') }}" >Contact Us</a>
             </li>

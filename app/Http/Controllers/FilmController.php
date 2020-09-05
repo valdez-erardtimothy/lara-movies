@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Auth;
 
 class FilmController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only('rateFilm', 'unrateFilm');
+
+        $this->middleware('admin')->except('show', 'index', 'rateFilm', 'unrateFilm');
+    }
     /**
      * Display a listing of the resource.
      *

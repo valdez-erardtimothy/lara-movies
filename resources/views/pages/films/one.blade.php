@@ -17,8 +17,10 @@
         <div class="col-lg-8">
             <h3>{{ $film->film_title }}
                 <small>
-                    <a href='{{ action('FilmController@edit', $film) }}' class="fas fa-edit" title="edit"></a> 
-                    <a href='{{ route('films.delete', $film) }}' class="fas fa-trash" title="delete"></a>
+                    @admin
+                    <a href='{{ action('FilmController@edit', $film) }}' class="fas fa-edit btn btn-secondary" title="edit"></a> 
+                    <a href='{{ route('films.delete', $film) }}' class="fas fa-trash btn btn-danger" title="delete"></a>
+                    @endadmin
                 </small>
             </h3>
             @if (isset($film->genre) && $film->genre)
@@ -73,7 +75,6 @@
                 @foreach ($film->producer()->get() as $producer)
                     <tr>
                         <td><a href="/producers/{{ $producer->id }}">{{ $producer->producer_fullname }}</a></td>
-                        <td><a href=""><i class="fas fa-trash" title="delete"></i></a></td>
                     </tr>
                 @endforeach
             </table>

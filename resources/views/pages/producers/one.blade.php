@@ -12,15 +12,16 @@
             <table>
                 <tr>
                     <th>E-mail: </th>
-                    <td>{{ $producer->email }} <a class="fas fa-envelope" title="write e-mail"></a></td>
+                    <td>{{ $producer->email }} <a class="fas fa-envelope" title="write e-mail" href="mailto:{{ $producer->email }}"></a></td>
                 </tr>
                 <tr>
                     <th>Website: </th>
-                    <td>{{ $producer->website }} <a class="fas fa-globe" title="go to site"></a></td>
+                    <td>{{ $producer->website }} <a class="fas fa-globe" title="go to site" href="{{ $producer->website }}"></a></td>
                 </tr>
             </table>
         </div>
         <div class="col-sm-3">
+            @admin
             <ul class="list-group">
                 <li class="list-group-item">Actions</li>
                 <li class="list-group-item list-group-item-action"><a href="{{ action('ProducerController@edit', $producer) }}">Edit <i class="fas fa-edit"></i></a></li>
@@ -31,14 +32,15 @@
                     </a>
                 </li>
             </ul>
+            @endadmin
         </div>
     </div>
-    <h4>Films Produced <a href="{{-- add film-producer --}}" class="fas fa-plus"></a></h4>
-    <table class="table table-striped">
+    <hr>
+    <h4>Films Produced </h4>
+    <table class="table table-striped table-small">
         @foreach ($producer->film()->get() as $film)
             <tr>
                 <td><a href="{{ action('FilmController@show', $film) }}">{{ $film->film_title }}</a></td>
-                <td><a href="{{-- remove film-producer entry --}}" class="fas fa-trash"></a></td>
             </tr>
         @endforeach
     </table>

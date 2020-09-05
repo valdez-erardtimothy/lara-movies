@@ -26,7 +26,7 @@ Route::post('films/attach_producer', 'FilmController@attachProducer')->name('fil
 Route::get('films/deleted',  'FilmController@deleted')->name('films.deleted');
 Route::get('films/{id}/restore',  'FilmController@restore')->name('films.restore');
 Route::get('actors/deleted',  'ActorController@deleted')->name('actors.deleted');
-Route::get('acotrs/{id}/restore',  'ActorController@restore')->name('actors.restore');
+Route::get('actors/{id}/restore',  'ActorController@restore')->name('actors.restore');
 
 // rating
 Route::post('films/{film}/rate', 'FilmController@rateFilm')->name('films.rate');

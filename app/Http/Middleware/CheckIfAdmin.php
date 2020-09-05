@@ -17,8 +17,8 @@ class CheckIfAdmin
     public function handle($request, Closure $next)
     {
         if(!Auth::check()) {
-            return route('login');
+            return redirect()->route('login');
         }
-        return (bool)Auth::user()->is_admin? $next($request):abort(403, 'You are not an administrator.');;
+        return Auth::check() && (bool)Auth::user()->is_admin? $next($request):abort(403, 'You are not an administrator.');;
     }
 }

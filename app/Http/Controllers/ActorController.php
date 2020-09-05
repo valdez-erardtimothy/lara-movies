@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ActorController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('admin')->except('index', 'show');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -111,8 +116,8 @@ class ActorController extends Controller
     {
         //
         $validated_data = $this->form_validation($request);
-        $actor->actor_fullname = $request->actor_fullname;
-        $actor->actor_notes = $request->actor_notes;
+        $actor->actor_fullname = $validated_data['actor_fullname'];
+        $actor->actor_notes = $validated_data['actor_notes'];
         $actor->save();
         if(isset($validated_data['image'])) {
             $actor->clearMediaCollection();

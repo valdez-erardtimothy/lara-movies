@@ -8,7 +8,11 @@
 
 
 @section('main_content')
-    <h1>Producers <small><a href="{{ action('ProducerController@create') }}" class="fas fa-plus"></a></small></h1>
+    <h1>Producers 
+        @admin
+        <small><a href="{{ action('ProducerController@create') }}" class="fas fa-plus" title="New Producer"></a></small>
+        @endadmin
+    </h1>
         @if (session('update'))
             <p class="alert alert-primary"> {{ session('update') }}</p>
         @endif
@@ -18,9 +22,11 @@
                 <th>Name</th>
                 <th>E-mail</th>
                 <th>Website</th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>View</th>
+                @admin
+                <th>Edit</th>
+                <th>Delete</th>
+                @endadmin
             </tr>
         </thead>
         @foreach ($producers as $producer)
@@ -29,6 +35,7 @@
                 <td><a href="mailto:{{ $producer->email }}">{{ $producer->email }}</a></td>
                 <td><a href="{{ $producer->website }}"> {{ $producer->website }}</a></td>
                 <td><a href="{{ action('ProducerController@show', $producer) }}" class="fas fa-eye"></a></td>
+                @admin
                 <td><a href="{{ action('ProducerController@edit', $producer) }}" class="fas fa-edit"></a></td>
                 <td>
                     <a href="{{ route('producers.delete', $producer) }}" 
@@ -36,6 +43,7 @@
                     class="fas fa-trash">
                     </a>
                 </td>
+                @endadmin
             </tr>
         @endforeach
     </table>

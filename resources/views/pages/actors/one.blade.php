@@ -15,11 +15,16 @@
         <div class="col-lg-8">
             <h3>{{ $actor->actor_fullname }}
                 <small>
-                    <a href="{{ action('ActorController@edit', $actor) }}" class="fas fa-edit" title="edit"></a> 
-                    <a href="{{ route('actors.delete', $actor) }}"class="fas fa-trash" title="delete"></a>
+                    @admin
+                    <a href="{{ action('ActorController@edit', $actor) }}" class="fas fa-edit btn btn-secondary" title="edit"></a> 
+                    <a href="{{ route('actors.delete', $actor) }}"class="fas fa-trash btn btn-danger" title="delete"></a>
+                    @endadmin
                 </small>
             </h3>
-            <p>Info: {{ $actor->actor_notes }}</p>
+            @if (isset($actor->actor_notes))
+            <h5>Notes</h5>
+            <p class="card-text">{{ $actor->actor_notes }}</p>
+            @endif
         </div>
         <div class="col-lg-4">
             <figure>
