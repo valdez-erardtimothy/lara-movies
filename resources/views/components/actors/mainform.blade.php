@@ -23,12 +23,19 @@
                 <p class="alert alert-danger">{{ $message }}</p>
             @enderror
         </div>
+        <div class="form-group">
+            {{ Form::label('image', "Image", ['class'=>'form label'])}}
+            {!! Form::file("image", ["class"=>'form-control-file']) !!}
+            @error('poster')
+                <p class="alert alert-danger">{{ $message }}</p>
+            @enderror
+        </div>
         {!! Form::submit($submit_button, ['class'=>"btn btn-primary"]) !!}
 
     </div>
     <div class="col-lg-6">
-        {{-- to house the image upload form input later --}}
-    </div>
+        {{-- to house the image upload form input later (cancelled) --}}
+    </div> 
 </div>
 
 

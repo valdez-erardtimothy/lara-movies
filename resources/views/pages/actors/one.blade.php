@@ -12,12 +12,7 @@
         <p class="alert alert-primary">{{ session('update') }}</p>
     @endif
     <div class="row ">
-        <div class="col-lg-5">
-            <figure>
-                <img src="" alt="{{ $actor->actor_fullname }} Poster">
-            </figure>
-        </div>
-        <div class="col-lg-7">
+        <div class="col-lg-8">
             <h3>{{ $actor->actor_fullname }}
                 <small>
                     <a href="{{ action('ActorController@edit', $actor) }}" class="fas fa-edit" title="edit"></a> 
@@ -25,6 +20,11 @@
                 </small>
             </h3>
             <p>Info: {{ $actor->actor_notes }}</p>
+        </div>
+        <div class="col-lg-4">
+            <figure>
+                <img src="{{ $actor->getFirstMediaUrl() }}" width="100%">
+            </figure>
         </div>
     </div>
     

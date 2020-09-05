@@ -14,19 +14,10 @@
     @if (session('update'))
         <p class="alert alert-primary">{{ session('update') }}</p>
     @endif
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
     <h1>{{ $film->film_title }}</h1>
     <h3>Edit Film</h3>
     @php
-    $form_open = Form::model($film, ['action'=>['FilmController@update', $film->id], 'method'=>'PATCH']);
+    $form_open = Form::model($film, ['action'=>['FilmController@update', $film->id], 'method'=>'PATCH', 'files' => true]);
     $submit_text = 'Update';
     @endphp
 
@@ -39,6 +30,21 @@
                 Actors 
                 <button id="add-actor" class="fas fa-plus btn btn-primary"></button>
             </h4>
+            {{-- attach actor errors --}}
+            @error('actor_id', 'attach_actor')
+                <p class="alert alert-primary">{{ $message }}</p>
+            @enderror
+            @error('film_id', 'attach_actor')
+                <p class="alert alert-primary">{{ $message }}</p>
+            @enderror
+            @error('character', 'attach_actor')
+                <p class="alert alert-primary">{{ $message }}</p>
+            @enderror
+            @error('role_id', 'attach_actor')
+                <p class="alert alert-primary">{{ $message }}</p>
+            @enderror
+
+            {{-- attached Actors table--}}
             <table class="table table-small table-striped">
                 <thead>
                     <tr>
@@ -66,11 +72,20 @@
                 </tbody>
             </table>
         </div>
+
+        {{-- attached producers table--}}
         <div class="col-md-3">
             <h4>
                 Producers 
                 <button id="add-producer" class="fas fa-plus btn btn-primary"></button>
             </h4>
+            {{-- attach producer form validation errors--}}
+            @error('producer_id', 'attach_producer')
+                <p class="alert alert-primary">{{ $message }}</p>
+            @enderror
+            @error('film_id', 'attach_producer')
+                <p class="alert alert-primary">{{ $message }}</p>
+            @enderror
             <table class="table table-small">
                 @foreach ($film->producer()->get() as $producer)
                     <tr data-producer-id="{{ $producer->id }}">

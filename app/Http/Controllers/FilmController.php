@@ -71,6 +71,10 @@ class FilmController extends Controller
         // dd($validated_data);
         $film = new Film($validated_data);
         $film->save();
+        if(isset($validated_data['poster'])) {
+            $film->clearMediaCollection();
+            $film->addMediaFromRequest('poster')->toMediaCollection();
+        }
         return redirect()->action('FilmController@show', [$film])->with('update', 'Film successfully added!');
     }
 
@@ -142,6 +146,10 @@ class FilmController extends Controller
         $film->additional_info = $validated_data['additional_info'];
         $film->genre_id = $validated_data['genre_id'];
         $film->save();
+        if(isset($validated_data['poster'])) {
+            $film->clearMediaCollection();
+            $film->addMediaFromRequest('poster')->toMediaCollection();
+        }
 
         return redirect()->action('FilmController@show', [$film])->with('update', 'Film edited!');
     }
@@ -168,7 +176,7 @@ class FilmController extends Controller
      * Add or update film-actor relationship
      */
     public function attachActor(Request $request) {
-        $validated = $request->validate([
+        $validated = $request->validateWithBag('attach_actor', [
             'film_id' => 'required|exists:\App\Film,id',
             'actor_id' => 'required|exists:\App\Actor,id',
             'role_id' => 'required|exists:\App\ActorRole,id',
@@ -192,7 +200,7 @@ class FilmController extends Controller
     }
 
     public function attachProducer(Request $request) {
-        $validated = $request->validate([
+        $validated = $request->validateWithBag('attach_producer',[
             'film_id' =>'required|exists:\App\Film,id',
             'producer_id' => 'required|exists:\App\Producer,id'
         ]);
@@ -244,7 +252,8 @@ class FilmController extends Controller
             'story' => 'required',
             'release_date' => 'required|date',
             'duration' => 'required|integer',
-            'additional_info' => 'nullable'
+            'additional_info' => 'nullable',
+            'poster' => 'nullable|image'
         ]);
     }
 }

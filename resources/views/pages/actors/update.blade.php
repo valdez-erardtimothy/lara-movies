@@ -11,7 +11,7 @@
 @section('main_content')
 <h1>{{ $actor->actor_fullname }} Update</h1>
 @php
-    $subview['form_open'] = Form::model($actor, ['action' => ['ActorController@update', $actor], 'method' => 'PATCH']);
+    $subview['form_open'] = Form::model($actor, ['action' => ['ActorController@update', $actor], 'method' => 'PATCH', 'files' => true]);
     $subview['submit_button'] = "Update";
 @endphp
 @include('components.actors.mainform', $subview)

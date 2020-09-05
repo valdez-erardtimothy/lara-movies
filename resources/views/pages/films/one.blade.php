@@ -14,12 +14,7 @@
     @endif
 
     <div class="row ">
-        <div class="col-lg-5">
-            <figure>
-                <img src="" alt="{{ $film->film_title }} Poster">
-            </figure>
-        </div>
-        <div class="col-lg-7">
+        <div class="col-lg-8">
             <h3>{{ $film->film_title }}
                 <small>
                     <a href='{{ action('FilmController@edit', $film) }}' class="fas fa-edit" title="edit"></a> 
@@ -33,14 +28,19 @@
             @endif
             <p>{{ $film->duration }} minutes</p>
             <p>Released {{ $film->release_date }}</p>
+            <h4>Story</h4>
+            <p>{{ $film->story }}</p>
+            
+            <h4>Additional Info</h4>
+            <p>{{ $film->additional_info }}</p>
+        
+        </div>
+        <div class="col-lg-4">
+            <figure>
+                <img src="{{ $film->getFirstMediaUrl() }}" width="100%">
+            </figure>
         </div>
     </div>
-    <h4>Story</h4>
-    <p>{{ $film->story }}</p>
-    
-    <h4>Additional Info</h4>
-    <p>{{ $film->additional_info }}</p>
-
     <div class="row">
         <div class="col-md-9">
             <h4>Actors</h4>

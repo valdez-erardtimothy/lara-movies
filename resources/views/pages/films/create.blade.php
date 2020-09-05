@@ -5,7 +5,7 @@
 @section('main_content')
     <h1>Add Film</h1>
     @php
-    $data['form_open'] = Form::open(['action'=>'FilmController@store']);    
+    $data['form_open'] = Form::open(['action'=>'FilmController@store', 'files' => true]);    
     $data['submit_text'] = "Add";
     @endphp
     @include('components.films.mainform', $data)

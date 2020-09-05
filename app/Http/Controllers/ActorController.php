@@ -45,6 +45,10 @@ class ActorController extends Controller
         $actor->actor_fullname = $request->actor_fullname;
         $actor->actor_notes = $request->actor_notes;
         $actor->save();
+        if(isset($validated_data['image'])) {
+            $actor->clearMediaCollection();
+            $actor->addMediaFromRequest('image')->toMediaCollection();
+        }
 
         return redirect()->action('ActorController@show', $actor)->with('update', 'Actor Successfully added!');
     }
@@ -110,6 +114,10 @@ class ActorController extends Controller
         $actor->actor_fullname = $request->actor_fullname;
         $actor->actor_notes = $request->actor_notes;
         $actor->save();
+        if(isset($validated_data['image'])) {
+            $actor->clearMediaCollection();
+            $actor->addMediaFromRequest('image')->toMediaCollection();
+        }
         return redirect()->action('ActorController@show', $actor)->with('update', 'Actor Successfully updated!');
         
     }
@@ -137,7 +145,8 @@ class ActorController extends Controller
     private function form_validation(Request $request) {
         return $request->validate([
             'actor_fullname' => 'required|alpha_dash_spaces|max:128',
-            'actor_notes' => 'nullable'
+            'actor_notes' => 'nullable',
+            'image' => 'nullable|image'
         ]);
     }
 }
