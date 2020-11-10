@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,6 +15,6 @@ class Actor extends Model implements HasMedia
     use SoftDeletes;
     
     public function film() {
-        return $this->belongsToMany('App\Film','film_actors')->using('App\FilmActor')->withPivot('character', 'role_id');
+        return $this->belongsToMany('App\Models\Film','film_actors')->using('App\Models\FilmActor')->withPivot('character', 'role_id');
     }
 }

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Film;
-use App\Genre;
+use App\Models\Film;
+use App\Models\Genre;
+use App\Models\Actor;
+use App\Models\Producer;
+use App\Models\ActorRole;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth;
@@ -96,7 +99,7 @@ class FilmController extends Controller
         //
         $film->load('actor', 'user');
         $data['film'] = $film;
-        $data['roles'] = \App\ActorRole::all()->mapWithKeys(function($role) {
+        $data['roles'] = ActorRole::all()->mapWithKeys(function($role) {
             return[$role['id']=>$role['role']];
         });
 
@@ -116,15 +119,15 @@ class FilmController extends Controller
         $genres= Genre::all()->mapWithKeys(function($genre) {
             return [$genre['id']=>$genre['genre']];
         });
-        $roles = \App\ActorRole::all()->mapWithKeys(function($role) {
+        $roles = ActorRole::all()->mapWithKeys(function($role) {
             return[$role['id']=>$role['role']];
         });
-        $actors = \App\Actor::all()->mapWithKeys(function($actor) {
+        $actors = Actor::all()->mapWithKeys(function($actor) {
             return[$actor['id']=>"$actor[actor_fullname] ($actor[id])"];
         });
         // get only the producers not currently attached to the film
         $film_id = $film->id;
-        $producers = \App\Producer::whereDoesntHave('film', function($q) use ($film_id) {
+        $producers = Producer::whereDoesntHave('film', function($q) use ($film_id) {
             $q->where('id', $film_id);
         })->get()->mapWithKeys(function($producer) {
             return [$producer['id']=>"$producer[producer_fullname] ($producer[id])"];
@@ -174,7 +177,7 @@ class FilmController extends Controller
         return redirect()->action('FilmController@index')->with('update', "$film->film_title has been deleted.");
     }
 
-    public function detachActor(Film $film, \App\Actor $actor) {
+    public function detachActor(Film $film, Actor $actor) {
         $film->actor()->detach($actor);
         return redirect()->back()->with('update', 'Character deleted');
     }
@@ -200,7 +203,7 @@ class FilmController extends Controller
         return redirect()->back()->with('update', 'Actor attached!');
     }
 
-    public function detachProducer(Film $film, \App\Producer $producer ) {
+    public function detachProducer(Film $film, Producer $producer ) {
         $film->producer()->detach($producer);
         
         return redirect()->back()->with('update', 'Producer detached!');

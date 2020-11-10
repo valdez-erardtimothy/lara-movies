@@ -1,6 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
+use App\Models\Producer;
 
 class ProducerSeeder extends Seeder
 {
@@ -15,7 +18,7 @@ class ProducerSeeder extends Seeder
         $faker = \Faker\Factory::create();
         $faker->addProvider(new \Xylis\FakerCinema\Provider\Movie($faker));
         foreach(range(0,100) as $index) {
-            \App\Producer::create([
+            Producer::create([
                 'producer_fullname' => $faker->studio,
                 'email' => $faker->email,
                 'website' => $faker->domainName 

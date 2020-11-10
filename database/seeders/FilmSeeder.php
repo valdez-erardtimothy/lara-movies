@@ -1,6 +1,16 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
+use App\Models\Film;
+use App\Models\Genre;
+use APp\Models\Actor;
+use App\Models\Producer;
+use App\Models\ActorRole;
+
+
+
 
 class FilmSeeder extends Seeder
 {
@@ -16,7 +26,7 @@ class FilmSeeder extends Seeder
         $faker->addProvider(new \Xylis\FakerCinema\Provider\Movie($faker));
         $faker->addProvider(new \Xylis\FakerCinema\Provider\Character($faker));
 
-        $genre_count = \App\Genre::count();
+        $genre_count = Genre::count();
         // $actors_count= \App\Actor::count();
         // $producers_count = \App\Producer::count();
         // $roles_count = \App\ActorRole::count();
@@ -27,7 +37,7 @@ class FilmSeeder extends Seeder
             $runtime_min += $runtime_arr[1];
 
             // create the film entry 
-            $film = \App\Film::create([
+            $film = Film::create([
                 'film_title' => $faker->movie,
                 'story' => $faker->overview,
                 'release_date' => $faker->date(),
@@ -36,15 +46,15 @@ class FilmSeeder extends Seeder
             ]);
 
             // genre
-            $film->genre()->associate(\App\Genre::find($faker->randomDigit%$genre_count+1));
+            $film->genre()->associate(Genre::find($faker->randomDigit%$genre_count+1));
             // insert 10 producers
-            $film->producer()->sync(\App\Producer::limit(10)->inRandomOrder()->get());
+            $film->producer()->sync(Producer::limit(10)->inRandomOrder()->get());
 
             // insert max of 10 character
-            foreach(\App\Actor::inRandomOrder()->limit(10)->get() as $actor) {
+            foreach(Actor::inRandomOrder()->limit(10)->get() as $actor) {
                 $film->actor()->attach($actor, [
                     'character' => $faker->character,
-                    'role_id' => \App\ActorRole::inRandomOrder()->first()->id
+                    'role_id' => ActorRole::inRandomOrder()->first()->id
                 ]);
             }
             

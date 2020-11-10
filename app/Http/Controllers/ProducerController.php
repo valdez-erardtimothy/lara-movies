@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Producer;
+use App\Models\Producer;
 use Illuminate\Http\Request;
-use ProducerSeeder;
+// use ProducerSeeder;
+use App\Models\Film;
 
 class ProducerController extends Controller
 {
@@ -78,7 +79,7 @@ class ProducerController extends Controller
     {
         //
         $producer_id = $producer->id;
-        $films = \App\Film::whereDoesntHave('producer', function($q) use ($producer_id) {
+        $films = Film::whereDoesntHave('producer', function($q) use ($producer_id) {
             $q->where('id', $producer_id);
         })->get()->mapWithKeys(function($film) {
             return [$film['id']=>"$film[film_title] ($film[id])"];

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,18 +16,18 @@ class Film extends Model implements HasMedia
     public $timestamps = false;
     use SoftDeletes;
     public function producer() {
-        return $this->belongsToMany('App\Producer', 'film_producers');
+        return $this->belongsToMany('App\Models\Producer', 'film_producers');
     }
 
     public function actor() {
-        return $this->belongsToMany('\App\Actor','film_actors')->withPivot('character', 'role_id')->using('App\FilmActor');
+        return $this->belongsToMany('\App\Models\Actor','film_actors')->withPivot('character', 'role_id')->using('App\Models\FilmActor');
     }
 
     public function genre() {
-        return $this->belongsTo('App\Genre');
+        return $this->belongsTo('App\Models\Genre');
     }
 
     public function user() {
-        return $this->belongsToMany('\App\user','film_ratings')->withPivot('rating', 'comment');
+        return $this->belongsToMany('\App\Models\user','film_ratings')->withPivot('rating', 'comment');
     }
 }

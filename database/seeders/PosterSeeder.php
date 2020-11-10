@@ -1,8 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use App\Film;
-use App\Actor;
+use App\Models\Film;
+use App\Models\Actor;
 
 class PosterSeeder extends Seeder
 {

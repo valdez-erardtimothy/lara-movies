@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
+use App\Models\Actor;
 use Illuminate\Http\Request;
+use App\Models\Film;
+use App\Models\ActorRole;
 
 class ActorController extends Controller
 {
@@ -87,7 +89,7 @@ class ActorController extends Controller
     {
         //
         $data['actor'] = $actor->load('film');
-        $data['roles'] = \App\ActorRole::all()->mapWithKeys(function($role) {
+        $data['roles'] = ActorRole::all()->mapWithKeys(function($role) {
             return[$role['id']=>$role['role']];
         });
         return view('pages.actors.one', $data);
@@ -102,10 +104,10 @@ class ActorController extends Controller
     public function edit(Actor $actor)
     {
         //
-        $roles = \App\ActorRole::all()->mapWithKeys(function($role) {
+        $roles = ActorRole::all()->mapWithKeys(function($role) {
             return[$role['id']=>$role['role']];
         });
-        $films = \App\Film::all()->mapWithKeys(function($film) {
+        $films = Film::all()->mapWithKeys(function($film) {
             return[$film['id']=>"$film[film_title] ($film[id])"];
         });
         return view('pages.actors.update', compact('actor', 'films', 'roles'));

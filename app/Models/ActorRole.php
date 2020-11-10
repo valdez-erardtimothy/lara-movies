@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +11,6 @@ class ActorRole extends Model
     public $timestamps=false;
 
     public function filmActor() {
-        $this->hasMany('App\FilmActor');
+        $this->hasMany('App\Models\FilmActor');
     }
 }

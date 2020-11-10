@@ -1,7 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -14,7 +17,7 @@ class UserSeeder extends Seeder
     {
         //
         // create an admin account for CRUD guarding
-        \App\User::create([        
+        User::create([        
             'name' => 'admin',
             'email' => 'adminized@admin.jp',
             'email_verified_at' => now(),
@@ -24,8 +27,9 @@ class UserSeeder extends Seeder
         ])->save();
 
         // builtin factory for user seeding
-        factory(App\User::class, 50)->create()->each(function ($user) {
+        // factory(User::class, 50)->create()->each(function ($user) {
 
-        });
+        // });
+        User::factory()->count(50)->create();
     }
 }

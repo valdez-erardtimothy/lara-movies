@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ActorRole;
+use App\Models\ActorRole;
 use Illuminate\Http\Request;
 
 class ActorRoleController extends Controller

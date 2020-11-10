@@ -1,7 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use App\ActorRole;
+use App\Models\ActorRole;
 
 class ActorRoleSeeder extends Seeder
 {
