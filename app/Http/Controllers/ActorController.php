@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ActorController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('admin')->except('index', 'show');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -28,6 +33,7 @@ class ActorController extends Controller
     public function create()
     {
         //
+        return view('pages.actors.create');
     }
 
     /**
@@ -39,6 +45,36 @@ class ActorController extends Controller
     public function store(Request $request)
     {
         //
+        $validated_data = $this->form_validation($request);
+        $actor = new Actor();
+        $actor->actor_fullname = $request->actor_fullname;
+        $actor->actor_notes = $request->actor_notes;
+        $actor->save();
+        if(isset($validated_data['image'])) {
+            $actor->clearMediaCollection();
+            $actor->addMediaFromRequest('image')->toMediaCollection();
+        }
+
+        return redirect()->action('ActorController@show', $actor)->with('update', 'Actor Successfully added!');
+    }
+
+     /**
+     * Display the list of all soft-deleted actor entries
+     */
+    public function deleted() {
+        $actors = Actor::onlyTrashed()->get();
+
+        return view('pages.actors.deleted', compact('actors'));
+    }
+
+    /**
+     * restore a soft-deleted film entry
+     * @param int $id -- the ID of deleted film to restore
+     */
+    public function restore($id) {
+        $actor = Actor::onlyTrashed()->find($id);
+        $actor->restore();
+        return redirect()->action('ActorController@deleted')->with('update', "{$actor->actor_fullname} (ID: {$actor->id})  has been restored.");
     }
 
     /**
@@ -51,7 +87,9 @@ class ActorController extends Controller
     {
         //
         $data['actor'] = $actor->load('film');
-        $data['roles'] = \App\ActorRole::all()->toArray();
+        $data['roles'] = \App\ActorRole::all()->mapWithKeys(function($role) {
+            return[$role['id']=>$role['role']];
+        });
         return view('pages.actors.one', $data);
     }
 
@@ -64,6 +102,13 @@ class ActorController extends Controller
     public function edit(Actor $actor)
     {
         //
+        $roles = \App\ActorRole::all()->mapWithKeys(function($role) {
+            return[$role['id']=>$role['role']];
+        });
+        $films = \App\Film::all()->mapWithKeys(function($film) {
+            return[$film['id']=>"$film[film_title] ($film[id])"];
+        });
+        return view('pages.actors.update', compact('actor', 'films', 'roles'));
     }
 
     /**
@@ -76,6 +121,16 @@ class ActorController extends Controller
     public function update(Request $request, Actor $actor)
     {
         //
+        $validated_data = $this->form_validation($request);
+        $actor->actor_fullname = $validated_data['actor_fullname'];
+        $actor->actor_notes = $validated_data['actor_notes'];
+        $actor->save();
+        if(isset($validated_data['image'])) {
+            $actor->clearMediaCollection();
+            $actor->addMediaFromRequest('image')->toMediaCollection();
+        }
+        return redirect()->action('ActorController@show', $actor)->with('update', 'Actor Successfully updated!');
+        
     }
 
     /**
@@ -87,5 +142,22 @@ class ActorController extends Controller
     public function destroy(Actor $actor)
     {
         //
+        $actor->delete();
+        $actor->save();
+        return redirect()->action('ActorController@index')->with('update', "{$actor->actor_fullname} entry removed!");
+    }
+
+    /**
+     * 
+     * @param \Illuminate\Http\Request $request The request variable passed on the calling function
+     * 
+     * @return array the validated data -- the automicatic redirect fires upon failure  
+     */
+    private function form_validation(Request $request) {
+        return $request->validate([
+            'actor_fullname' => 'required|alpha_dash_spaces|max:128',
+            'actor_notes' => 'nullable',
+            'image' => 'nullable|image'
+        ]);
     }
 }

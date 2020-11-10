@@ -6,10 +6,18 @@ use App\Film;
 use App\Genre;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request; 
+use Illuminate\Support\Facades\Auth;
 
 
 class FilmController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only('rateFilm', 'unrateFilm');
+
+        $this->middleware('admin')->except('show', 'index', 'rateFilm', 'unrateFilm');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +30,26 @@ class FilmController extends Controller
 
         return view('pages.films.list', $data);
     }
+
+    /**
+     * Display the list of all soft-deleted film entries
+     */
+    public function deleted() {
+        $films = Film::onlyTrashed()->get();
+
+        return view('pages.films.deleted', compact('films'));
+    }
+
+    /**
+     * restore a soft-deleted film entry
+     * @param int $id -- the ID of deleted film to restore
+     */
+    public function restore($id) {
+        $film = Film::onlyTrashed()->find($id);
+        $film->restore();
+        return redirect()->action('FilmController@deleted')->with('update', "{$film->film_title} (ID: {$film->id})  has been restored.");
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -50,7 +78,11 @@ class FilmController extends Controller
         // dd($validated_data);
         $film = new Film($validated_data);
         $film->save();
-        return redirect()->action('FilmController@show', [$film])->with('alert', 'Film successfully added!');
+        if(isset($validated_data['poster'])) {
+            $film->clearMediaCollection();
+            $film->addMediaFromRequest('poster')->toMediaCollection();
+        }
+        return redirect()->action('FilmController@show', [$film])->with('update', 'Film successfully added!');
     }
 
     /**
@@ -62,8 +94,11 @@ class FilmController extends Controller
     public function show(Film $film)
     {
         //
+        $film->load('actor', 'user');
         $data['film'] = $film;
-        $data['roles'] = \App\ActorRole::all()->toArray();
+        $data['roles'] = \App\ActorRole::all()->mapWithKeys(function($role) {
+            return[$role['id']=>$role['role']];
+        });
 
         return view('pages.films.one', $data);
     }
@@ -81,7 +116,22 @@ class FilmController extends Controller
         $genres= Genre::all()->mapWithKeys(function($genre) {
             return [$genre['id']=>$genre['genre']];
         });
-        return view('pages.films.update', compact('film', 'genres'));
+        $roles = \App\ActorRole::all()->mapWithKeys(function($role) {
+            return[$role['id']=>$role['role']];
+        });
+        $actors = \App\Actor::all()->mapWithKeys(function($actor) {
+            return[$actor['id']=>"$actor[actor_fullname] ($actor[id])"];
+        });
+        // get only the producers not currently attached to the film
+        $film_id = $film->id;
+        $producers = \App\Producer::whereDoesntHave('film', function($q) use ($film_id) {
+            $q->where('id', $film_id);
+        })->get()->mapWithKeys(function($producer) {
+            return [$producer['id']=>"$producer[producer_fullname] ($producer[id])"];
+        });
+        unset($film_id);
+
+        return view('pages.films.update', compact('film', 'actors', 'genres', 'roles', 'producers'));
     }
 
     /**
@@ -103,8 +153,12 @@ class FilmController extends Controller
         $film->additional_info = $validated_data['additional_info'];
         $film->genre_id = $validated_data['genre_id'];
         $film->save();
+        if(isset($validated_data['poster'])) {
+            $film->clearMediaCollection();
+            $film->addMediaFromRequest('poster')->toMediaCollection();
+        }
 
-        return redirect()->action('FilmController@show', [$film])->with('alert', 'Film edited!');
+        return redirect()->action('FilmController@show', [$film])->with('update', 'Film edited!');
     }
 
     /**
@@ -117,7 +171,75 @@ class FilmController extends Controller
     {
         //
         $film->delete();
-        return redirect()->action('FilmController@index')->with('alert', "$film->film_title has been deleted.");
+        return redirect()->action('FilmController@index')->with('update', "$film->film_title has been deleted.");
+    }
+
+    public function detachActor(Film $film, \App\Actor $actor) {
+        $film->actor()->detach($actor);
+        return redirect()->back()->with('update', 'Character deleted');
+    }
+    
+    /** 
+     * Add or update film-actor relationship
+     */
+    public function attachActor(Request $request) {
+        $validated = $request->validateWithBag('attach_actor', [
+            'film_id' => 'required|exists:\App\Film,id',
+            'actor_id' => 'required|exists:\App\Actor,id',
+            'role_id' => 'required|exists:\App\ActorRole,id',
+            'character' => 'required'
+        ]);
+        $film = Film::find($validated['film_id']);
+        $film->actor()->syncWithoutDetaching([
+            $validated['actor_id'] => [
+            'role_id' => $validated['role_id'],
+            'character' => $validated['character']
+            ]
+        ]);
+
+        return redirect()->back()->with('update', 'Actor attached!');
+    }
+
+    public function detachProducer(Film $film, \App\Producer $producer ) {
+        $film->producer()->detach($producer);
+        
+        return redirect()->back()->with('update', 'Producer detached!');
+    }
+
+    public function attachProducer(Request $request) {
+        $validated = $request->validateWithBag('attach_producer',[
+            'film_id' =>'required|exists:\App\Film,id',
+            'producer_id' => 'required|exists:\App\Producer,id'
+        ]);
+
+        $film = Film::find($validated['film_id']);
+        $film->producer()->attach($validated['producer_id']);
+        
+        return redirect()->back()->with('update', 'Producer attached!');
+    }
+
+    /**
+     * Rate the film. 
+     * User is fetched via Auth.
+     * @param Film $film the film to rate
+     */
+    public function rateFilm(Request $request, Film $film) {
+        $validated = $request->validate([
+            'rating' => 'required|integer|between:1,5',
+            'comment' => 'nullable|profanity'
+        ]);
+
+        $film->user()->syncWithoutDetaching([Auth::user()->id => [
+            'rating' => $validated['rating'],
+            'comment' => $validated['comment']
+        ]]);
+        $film->save();
+        return redirect()->action('FilmController@show', $film)->with('update', "Film Rated.");
+    }
+
+    public function unrateFilm(Film $film) {
+        $film->user()->detach(Auth::user());
+        return redirect()->action('FilmController@show', $film)->with('update', "Film Rating removed.");
     }
 
     /**
@@ -137,7 +259,8 @@ class FilmController extends Controller
             'story' => 'required',
             'release_date' => 'required|date',
             'duration' => 'required|integer',
-            'additional_info' => 'nullable'
+            'additional_info' => 'nullable',
+            'poster' => 'nullable|image'
         ]);
     }
 }

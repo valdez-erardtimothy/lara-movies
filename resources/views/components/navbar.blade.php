@@ -9,6 +9,7 @@
 
     // TODO later: navbar items that will only show upon passing admin check
     $admin_bar_items = [
+        'Actor Roles' => action('ActorRoleController@index'),
         'Genres' => action('GenreController@index'),
         'Users' => '/users' 
     ];
@@ -27,17 +28,51 @@
             @endforeach
 
 
+            @admin
             @foreach ($admin_bar_items as $admin_bar_item => $link)
             {{-- add admin check --}}
             <li class="nav-item">
                 <a class="nav-link" href="{{ $link }}">{{ $admin_bar_item }}</a>
             </li>
             @endforeach
+            @endadmin
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('contact-admin') }}" >Contact Us</a>
+            </li>
         </ul>
         
-        @guest
-            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-        @endguest
+        <!-- Right Side Of Navbar -->
+        <ul class="navbar-nav ml-auto">
+            <!-- Authentication Links -->
+            @guest
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                </li>
+                @if (Route::has('register'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                    </li>
+                @endif
+            @else
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        {{ Auth::user()->name }} <span class="caret"></span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                </li>
+            @endguest
+        </ul>
     </div>
 </nav>
   

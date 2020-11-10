@@ -9,7 +9,7 @@
     
     <div class="form-group">
         {{ Form::label('genre', "Genre", ['class' => 'form-label']) }}
-        {!! Form::text('genre', "", ['class' => 'form-control', 'required']) !!}
+        {!! Form::text('genre', null, ['class' => 'form-control', 'required']) !!}
         @error('genre')
             <p class="alert alert-danger">{{ $message }}</p>    
         @enderror

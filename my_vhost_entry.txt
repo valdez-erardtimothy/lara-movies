@@ -1,0 +1,11 @@
+<VirtualHost laramovies.test:80>
+    DocumentRoot "D:\dev\projects\web\lara-movies\public"
+    ## ServerAdmin directive must be a valid email format
+    ## ServerAdmin is needed for mailtrap SMTP
+    ServerAdmin laramovies@mail.test
+    <Directory "D:\dev\projects\web\lara-movies">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

@@ -18,6 +18,15 @@
         <div class="">
             <h1>Welcome</h1>
             <h3>Please click an item on the navbar to start browsing our content!</h3>
+            @guest
+                <p>You are not logged in. you may only browse our content.</p>
+            @else
+                @admin
+                    <p>You are logged in as an administrator</p>
+                @else
+                    <p>You are logged in as {{ Auth::user()->name }}</p>
+                @endadmin
+            @endguest
 
         </div>
     </div>
